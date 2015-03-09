@@ -11,26 +11,30 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
  *
- * @author Joshua Powell
- * I give permission for you to use this source code for whatever purposes as long as I am credited with creating it inside
- * the code.
+ * @author Joshua Powell I give permission for you to use this source code for
+ * whatever purposes as long as I am credited with creating it inside the code.
  */
-public class GetSourceCode extends JFrame
+public class GetSourceCodeGUI extends JFrame
 {
+
     static JFrame frame = new JFrame();
     JBackgroundPanel mainPanel = new JBackgroundPanel();
     JLabel descriptionLabel = new JLabel("Please Put The Link In The Text Box: ");
     JTextField userInputTextBox = new JTextField(20);
     JButton getSourceCodeButton = new JButton("Get Source Code");
-    
-    public GetSourceCode()
+
+    public GetSourceCodeGUI()
     {
         frame.setTitle("Web Source Code Scraper");
 
@@ -44,7 +48,7 @@ public class GetSourceCode extends JFrame
                 200);
 
         frame.setResizable(false);
-        
+
         frame.pack();
 
         frame.setVisible(true);
@@ -54,25 +58,25 @@ public class GetSourceCode extends JFrame
     {
         JPanel tempPanelOne = new JPanel();
         JPanel tempPanelTwo = new JPanel();
-        
+
         getSourceCodeButton.addActionListener(new JButtonListener());
-        
+
         getSourceCodeButton.setBackground(Color.WHITE);
         descriptionLabel.setForeground(Color.WHITE);
-        
+
         tempPanelOne.add(descriptionLabel);
         tempPanelOne.add(userInputTextBox);
-        
-        tempPanelOne.setBackground(new Color(0,0,0,125));
-        tempPanelTwo.setBackground(new Color(0,0,0,125));
-        
+
+        tempPanelOne.setBackground(new Color(0, 0, 0, 125));
+        tempPanelTwo.setBackground(new Color(0, 0, 0, 125));
+
         tempPanelTwo.add(getSourceCodeButton);
-        
+
         mainPanel.add(tempPanelOne, BorderLayout.CENTER);
         mainPanel.add(tempPanelTwo, BorderLayout.SOUTH);
     }
 
-    private class JButtonListener implements ActionListener
+    private class JButtonListener implements ActionListener, GetWebSourceCode
     {
 
         public JButtonListener()
@@ -82,10 +86,50 @@ public class GetSourceCode extends JFrame
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            
+            String sourceCodeString = GetSourceCode(userInputTextBox.getText().trim());
+
+            new SourceToTextFileGUI(sourceCodeString);
+        }
+
+        @Override
+        public String GetSourceCode(String userInput)
+        {
+            String generate_URL = userInput;
+            try
+            {
+                URL data = new URL(generate_URL);
+                StringBuilder entireSourceCode = new StringBuilder();
+                /**
+                 * Proxy code start If you are working behind firewall uncomment
+                 * below lines. Set your proxy server
+                 */
+
+                /* Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("192.168.0.202", 8080)); */
+                /* HttpURLConnection con = (HttpURLConnection) data.openConnection(proxy); */
+                /* Proxy code end */
+                /* Open connection */
+                /* comment below line in case of Proxy */
+                URLConnection con = (URLConnection) data.openConnection();
+                /* Read line by line */
+                try ( /* Read webpage coontent */ BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream())))
+                {
+                    /* Read line by line */
+                    in.mark(1000000000);
+                    while (in.readLine() != null)
+                    {
+                        entireSourceCode.append(in.readLine());
+                    }
+                }
+                return entireSourceCode.toString();
+            } catch (Exception ex)
+            {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR!", 1);
+
+                return null;
+            }
         }
     }
-    
+
     public class JBackgroundPanel extends JPanel
     {
 
@@ -101,7 +145,6 @@ public class GetSourceCode extends JFrame
                 img = ImageIO.read(new File("BlackAbstract.PNG"));
             } catch (IOException e)
             {
-                e.printStackTrace();
             }
         }
 
