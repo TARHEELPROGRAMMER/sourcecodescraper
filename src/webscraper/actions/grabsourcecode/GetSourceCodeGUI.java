@@ -33,6 +33,7 @@ public class GetSourceCodeGUI extends JFrame
     JLabel descriptionLabel = new JLabel("Please Put The Link In The Text Box: ");
     JTextField userInputTextBox = new JTextField(20);
     JButton getSourceCodeButton = new JButton("Get Source Code");
+    int isError = 0;
 
     public GetSourceCodeGUI()
     {
@@ -88,7 +89,14 @@ public class GetSourceCodeGUI extends JFrame
         {
             String sourceCodeString = GetSourceCode(userInputTextBox.getText().trim());
 
+            if (isError == 0)
+            {
             new SourceToTextFileGUI(sourceCodeString);
+            }
+            else
+            {
+                new GetSourceCodeGUI();
+            }
         }
 
         @Override
@@ -123,8 +131,8 @@ public class GetSourceCodeGUI extends JFrame
                 return entireSourceCode.toString();
             } catch (Exception ex)
             {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR!", 1);
-
+                JOptionPane.showMessageDialog(null, "Please Make Sure You Have An Internet Connection And The Link You Entered Is A Proper URL And Try Again", "ERROR!", 1);
+                isError = 1;
                 return null;
             }
         }
