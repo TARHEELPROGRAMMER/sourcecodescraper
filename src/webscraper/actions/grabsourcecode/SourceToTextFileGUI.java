@@ -28,14 +28,15 @@ import static webscraper.actions.grabsourcecode.GetSourceCodeGUI.frame;
  */
 public class SourceToTextFileGUI extends JFrame
 {
-
+    //Declaring Class Level Objects
     static JFrame frame = new JFrame();
     JBackgroundPanel mainPanel = new JBackgroundPanel();
     JTextArea descriptionTextArea = new JTextArea(50, 50);
     JButton saveButton = new JButton("Save To Text File");
     JButton goBackButton = new JButton("Go Back To Home Screen");
     private final String webPageSourceCode;
-
+    
+    //Constructor Built With Swing Components And The Source Code String Being Passed To The Constructor
     public SourceToTextFileGUI(String SourceCode)
     {
         webPageSourceCode = SourceCode;
@@ -58,28 +59,33 @@ public class SourceToTextFileGUI extends JFrame
         frame.setVisible(true);
     }
 
+    //Method To Build The Main Panel
     private void BuildMainPanel()
     {
+        //Temp Panels To Hold Swing Components
         JPanel tempPanelOne = new JPanel();
         JPanel tempPanelTwo = new JPanel();
-
+        
+        //Creating a scrollPane To Hold descriptionTextArea
+        JScrollPane scrollPane = new JScrollPane(descriptionTextArea);
+        
+        //Cosmetic Additions To Swing Components
         tempPanelOne.setBackground(new Color(0, 0, 0, 125));
         tempPanelTwo.setBackground(new Color(0, 0, 0, 125));
-
-        saveButton.addActionListener(new JButtonListener());
-        goBackButton.addActionListener(new JButtonListener());
-
         descriptionTextArea.setText(webPageSourceCode);
         descriptionTextArea.setWrapStyleWord(true);
         descriptionTextArea.setLineWrap(true);
-
-        JScrollPane scrollPane = new JScrollPane(descriptionTextArea);
-
-        tempPanelOne.add(scrollPane);
-
         scrollPane.setBackground(new Color(0, 0, 0, 125));
         descriptionTextArea.setBackground(Color.WHITE);
         descriptionTextArea.setForeground(Color.BLACK);
+        
+        //Creating The Action Listener For saveButton And goBackButton
+        saveButton.addActionListener(new JButtonListener());
+        goBackButton.addActionListener(new JButtonListener());
+
+        //Adding Panels To The Main Panel
+        tempPanelOne.add(scrollPane);
+
         tempPanelTwo.add(saveButton);
         tempPanelTwo.add(goBackButton);
 
@@ -89,11 +95,13 @@ public class SourceToTextFileGUI extends JFrame
         mainPanel.add(tempPanelTwo, BorderLayout.SOUTH);
     }
 
+    //This Method When Called Will Close frame
     private void CloseThis()
     {
         frame.dispose();
     }
 
+    //Action Listener Class For saveButton And goBackButton
     private class JButtonListener implements ActionListener
     {
 
@@ -106,6 +114,8 @@ public class SourceToTextFileGUI extends JFrame
         {
             if (saveButton == e.getSource())
             {
+                //This Block Of Code Is Opening A JFileChooser And Allowing The User To Save The Source Code String To A
+                //Text File.
                 JFileChooser saver = new JFileChooser("./");
                 FileFilter filter = new FileNameExtensionFilter("Text File","txt");
                 saver.setFileFilter(filter);
@@ -131,12 +141,15 @@ public class SourceToTextFileGUI extends JFrame
 
             if (goBackButton == e.getSource())
             {
+                //This Block Of Code Will Call The Main Screen GUI And Close SourceToTextFileGUI
                 new GetSourceCodeGUI();
                 CloseThis();
             }
         }
     }
 
+    //This Class Extends The JPanel Class And Adds A Background To The JPanel So The User Can Call This Class And Have
+    //A Background For The JPanel Already.
     public class JBackgroundPanel extends JPanel
     {
 

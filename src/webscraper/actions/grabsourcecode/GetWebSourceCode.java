@@ -12,5 +12,6 @@ package webscraper.actions.grabsourcecode;
  */
 public interface GetWebSourceCode
 {
+    //Method To Implement When A Class Is Trying To Get Source Code From A Web Page
     public abstract String GetSourceCode(String userInput);
 }

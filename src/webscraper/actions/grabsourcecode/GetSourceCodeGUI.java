@@ -27,7 +27,7 @@ import javax.swing.*;
  */
 public class GetSourceCodeGUI extends JFrame
 {
-
+    //Declaring Class Level Objects
     static JFrame frame = new JFrame();
     JBackgroundPanel mainPanel = new JBackgroundPanel();
     JLabel descriptionLabel = new JLabel("Please Put The Link In The Text Box: ");
@@ -35,6 +35,7 @@ public class GetSourceCodeGUI extends JFrame
     JButton getSourceCodeButton = new JButton("Get Source Code");
     int isError = 0;
 
+    //Constructor Built With Swing Components
     public GetSourceCodeGUI()
     {
         frame.setTitle("Web Source Code Scraper");
@@ -55,28 +56,34 @@ public class GetSourceCodeGUI extends JFrame
         frame.setVisible(true);
     }
 
+    //Method To Build The Main Panel
     private void BuildMainPanel()
     {
+        //Temp Panels To Hold Swing Components
         JPanel tempPanelOne = new JPanel();
         JPanel tempPanelTwo = new JPanel();
 
+        //Creating The Action Listener For getSourceCodeButton
         getSourceCodeButton.addActionListener(new JButtonListener());
 
+        //Cosmetic Additions To Swing Components
         getSourceCodeButton.setBackground(Color.WHITE);
         descriptionLabel.setForeground(Color.WHITE);
-
+        
+        tempPanelOne.setBackground(new Color(0, 0, 0, 125));
+        tempPanelTwo.setBackground(new Color(0, 0, 0, 125));
+        
+        //Adding Panels To The Main Panel
         tempPanelOne.add(descriptionLabel);
         tempPanelOne.add(userInputTextBox);
 
-        tempPanelOne.setBackground(new Color(0, 0, 0, 125));
-        tempPanelTwo.setBackground(new Color(0, 0, 0, 125));
-
-        tempPanelTwo.add(getSourceCodeButton);
+         tempPanelTwo.add(getSourceCodeButton);
 
         mainPanel.add(tempPanelOne, BorderLayout.CENTER);
         mainPanel.add(tempPanelTwo, BorderLayout.SOUTH);
     }
 
+    //Action Listener Class For getSourceCodeButton
     private class JButtonListener implements ActionListener, GetWebSourceCode
     {
 
@@ -87,6 +94,8 @@ public class GetSourceCodeGUI extends JFrame
         @Override
         public void actionPerformed(ActionEvent e)
         {
+            //Getting The String Representation Of The Source Code By Passing What Is Inside The userInputTextBox Into
+            //The GetSourceCode Method
             String sourceCodeString = GetSourceCode(userInputTextBox.getText().trim());
 
             if (isError == 0)
@@ -99,6 +108,7 @@ public class GetSourceCodeGUI extends JFrame
             }
         }
 
+        //This Method Below Will Get The Source Code Of The User Inputted Web Page.
         @Override
         public String GetSourceCode(String userInput)
         {
@@ -138,6 +148,8 @@ public class GetSourceCodeGUI extends JFrame
         }
     }
 
+    //This Class Extends The JPanel Class And Adds A Background To The JPanel So The User Can Call This Class And Have
+    //A Background For The JPanel Already.
     public class JBackgroundPanel extends JPanel
     {
 
